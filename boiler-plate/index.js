@@ -11,9 +11,12 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))  //application/x-www-form-urlencoded로 된 데이터를 분석해서 가져옴
 app.use(bodyParser.json())  // application/json 타입으로 된 데이터를 분석해서 가져옴
 
+const config = require('./config/key')
+
 const mongoose = require('mongoose')
 
-mongoose.connect('mongodb+srv://mindyeoi:aaa111@boilerplate.djq4a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+//이 정보는 비밀임..! 몽고DB아이디랑 비밀번호를 감춰야해..!
+mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
 }).then(()=>console.log('MongoDB Connected...'))
 .catch(err => console.log(err))

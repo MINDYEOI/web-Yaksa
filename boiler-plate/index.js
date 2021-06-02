@@ -13,6 +13,9 @@ app.use(bodyParser.json())  // application/json 타입으로 된 데이터를 �
 
 const config = require('./config/key')
 
+const cookieParser = require('cookie-parser')
+app.use(cookieParser())
+
 const mongoose = require('mongoose')
 
 //이 정보는 비밀임..! 몽고DB아이디랑 비밀번호를 감춰야해..!
@@ -46,6 +49,34 @@ app.post('/register', (req, res) => {
     })
   }) 
 
+})
+
+// 로그인 구현
+app.post('/login', (req, res) => {
+  // 1. 요청된 이메일이 데이터베이스에 있는지 찾기
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if(!user)
+    {
+      return res.json({
+        loginSuccess: false,
+        message: "There is no user with that email."
+      })
+    }
+    // 2. email과 비밀번호가 맞는지 확인 (User.js에 comparePassword 함수 정의되어 있음)
+    user.comparePassword(req.body.password, (err, isMatch) => {
+      if(!isMatch)
+        return res.json({loginSuccess: false, message: "Password is not match."})
+    // 3. 비밀번호까지 맞다면 유저를 위한 토큰 생성 (User.js에 generateToken 함수 정의)
+      user.generateToken((err, user) => { // err가 없으면 user에 정보 받아옴
+          if(err) 
+            return res.status(400).send(err);
+    // 4. 생성한 토큰을 저장함 -> 쿠키나 로컬 스토리지 등에 저장할 수 있는데 여기선 쿠키에 저장
+      res.cookie("loginCookie", user.token)
+      .status(200)  //성공했다는 표시
+      .json({loginSuccess: true, userId: user._id})
+      })
+    })
+  })  
 })
 
 app.listen(port, () => {

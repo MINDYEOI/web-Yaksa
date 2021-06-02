@@ -19,7 +19,7 @@ mongoose.connect('mongodb+srv://mindyeoi:aaa111@boilerplate.djq4a.mongodb.net/my
 .catch(err => console.log(err))
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('민정이짱짱맨최고최고!')
 })
 
 // 회원가입 구현

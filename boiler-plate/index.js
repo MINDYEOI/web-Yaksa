@@ -33,6 +33,9 @@ app.post('/register', (req, res) => {
 
   const user = new User(req.body) // req.body에 User의 정보를 저장
 
+  // 비밀번호 암호화
+
+
   // mongoDB에서 오는 메서드. 정보들이 user model에 저장
   user.save((err, userInfo) => {
     // 만약 에러가 나면, json형식으로 success:false를 보내주고, 에러메시지를 보내줌

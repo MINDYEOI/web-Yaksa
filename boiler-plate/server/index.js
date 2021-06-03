@@ -3,7 +3,7 @@ const app = express()
 const port = 5000
 
 // User.js에서 만든 model을 가져옴
-const { User } = require('./models/User')
+const { User } = require('./server/models/User')
 
 // body-parser 가져옴
 const bodyParser = require('body-parser')
@@ -11,14 +11,14 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}))  //application/x-www-form-urlencoded로 된 데이터를 분석해서 가져옴
 app.use(bodyParser.json())  // application/json 타입으로 된 데이터를 분석해서 가져옴
 
-const config = require('./config/key')
+const config = require('./server/config/key')
 
 const cookieParser = require('cookie-parser')
 app.use(cookieParser())
 
 const mongoose = require('mongoose')
 
-const { auth } = require('./middleware/auth')
+const { auth } = require('./server/middleware/auth')
 
 //이 정보는 비밀임..! 몽고DB아이디랑 비밀번호를 감춰야해..!
 mongoose.connect(config.mongoURI, {

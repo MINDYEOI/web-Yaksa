@@ -18,6 +18,8 @@ app.use(cookieParser())
 
 const mongoose = require('mongoose')
 
+const { auth } = require('./middleware/auth')
+
 //이 정보는 비밀임..! 몽고DB아이디랑 비밀번호를 감춰야해..!
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false
@@ -30,7 +32,7 @@ app.get('/', (req, res) => {
 
 // 회원가입 구현
 // route의 endpoint는 register
-app.post('/register', (req, res) => {
+app.post('/api/users/register', (req, res) => {
   // 회원가입할 때 필요한 정보들을 client에서 가져오면
   // 그것들을 데이터베이스에 넣어준다.
 
@@ -52,7 +54,7 @@ app.post('/register', (req, res) => {
 })
 
 // 로그인 구현
-app.post('/login', (req, res) => {
+app.post('/api/users/login', (req, res) => {
   // 1. 요청된 이메일이 데이터베이스에 있는지 찾기
   User.findOne({ email: req.body.email }, (err, user) => {
     if(!user)
@@ -77,6 +79,21 @@ app.post('/login', (req, res) => {
       })
     })
   })  
+})
+
+
+//
+app.get('/api/users/auth', auth ,(req,res) => {
+  // 여기까지 미들웨어(auth) 통과했으면 authentication == true 라는 뜻
+  res.status(200).json({
+    _id: req.user._id,
+    isAdmin: req.user.role ===  0 ? false : true,  // role이 0이면 일반 유저, role이 0이 아니면 관리자.
+    isAuth: true,
+    email: req.user.email,
+    lastname: req.user.lastname,
+    role: req.user.role,
+    image: req.user.image
+  })
 })
 
 app.listen(port, () => {

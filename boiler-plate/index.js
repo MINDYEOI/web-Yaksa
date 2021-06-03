@@ -53,7 +53,7 @@ app.post('/api/users/register', (req, res) => {
 
 })
 
-// 로그인 구현
+// 로그인 구현 -> 로그인 하면 토큰 생성
 app.post('/api/users/login', (req, res) => {
   // 1. 요청된 이메일이 데이터베이스에 있는지 찾기
   User.findOne({ email: req.body.email }, (err, user) => {
@@ -82,7 +82,7 @@ app.post('/api/users/login', (req, res) => {
 })
 
 
-//
+// 인증 구현 (이 사람이 일반유저인지 관리자인지)
 app.get('/api/users/auth', auth ,(req,res) => {
   // 여기까지 미들웨어(auth) 통과했으면 authentication == true 라는 뜻
   res.status(200).json({
@@ -94,6 +94,17 @@ app.get('/api/users/auth', auth ,(req,res) => {
     role: req.user.role,
     image: req.user.image
   })
+})
+
+// 로그아웃 구현 (로그인 때 만든 토큰을 지워버림)
+app.get('/api/users/logout', auth, (req, res) => {
+  User.findOneAndUpdate({_id: req.user._id}, // id로 User를 찾아서 업데이터 시킴
+    { token: "" }, (err, user) => {
+      if(err) return res.json({success: false, err});
+      return res.status(200).send({
+        success: true
+      })
+    }) 
 })
 
 app.listen(port, () => {

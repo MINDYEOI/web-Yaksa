@@ -9,8 +9,8 @@ function LandingPage() {
     }, [])
 
     return (
-        <div>
-            LandingPage 랜딩페이지
+        <div style={{justifyContent:'center', alignItems: 'center', display:'flex', width:'100%'}}>
+            <h1>시작 페이지</h1>
         </div>
     )
 }

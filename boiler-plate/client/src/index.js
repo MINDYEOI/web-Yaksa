@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'  // app에 redux를 연결시켜주기 위해 redux에서 제공하는 provider 사용
-//import {  } from 'redux';  // redux에서 createStore 가져옴.
-import { applyMiddleware,createStore } from 'redux';  // object만 받는 store가 promise나 functions도 받기 위해 middleware을 사용함
+import { createStore } from 'redux';  // redux에서 createStore 가져옴.
+import { applyMiddleware } from 'redux';  // object만 받는 store가 promise나 functions도 받기 위해 middleware을 사용함
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
 import Reducer from './_reducers';

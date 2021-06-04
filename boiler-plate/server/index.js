@@ -111,7 +111,7 @@ app.get('/api/users/logout', auth, (req, res) => {
 // test
 app.get('/api/hello', (req, res) => {
   
-  res.send("hello");
+  res.send("hello world");
 })
 
 app.listen(port, () => {

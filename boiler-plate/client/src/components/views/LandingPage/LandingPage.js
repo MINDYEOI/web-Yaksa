@@ -4,7 +4,7 @@ import axios from 'axios'
 function LandingPage() {    
     // 랜딩페이지에 들어오자마자
     useEffect(() => {
-        axios.get('http://localhost:5000/api/hello') // get request를 서버로 보냄 (endpoint는 /api/hello)
+        axios.get('/api/hello') // get request를 서버로 보냄 (endpoint는 /api/hello)
         .then(response => console.log(response.data)) // 서버로부터 응답 받은 내용을 콘솔에 출력
     }, [])
 

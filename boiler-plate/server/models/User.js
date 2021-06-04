@@ -47,10 +47,10 @@ userSchema.pre('save', function( next ){
     if(user.isModified('password')) // password를 변경할 때만 적용되도록..
     {
         // 비밀번호 암호화 (https://www.npmjs.com/package/bcrypt 에서 가져옴)
-        bcrypt.genSalt(saltRounds, function(err, salt)  // salt를 만드는 함수
+        bcrypt.genSalt(saltRounds, (err, salt) =>  // salt를 만드는 함수
         {
             if(err) return next(err)  // 에러 나면 return err
-            bcrypt.hash(user.password, salt, function(err, hash) {   // bcrypt.hash(암호화되지 않은 pw, salt, function(err, 암호화된 비밀번호))
+            bcrypt.hash(user.password, salt, (err, hash) => {   // bcrypt.hash(암호화되지 않은 pw, salt, function(err, 암호화된 비밀번호))
                 if(err) return next(err)    // 에러 나면 return err
                 user.password = hash    // 성공하면 user.password를 hash로 교체
                 next()    

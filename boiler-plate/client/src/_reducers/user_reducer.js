@@ -10,8 +10,7 @@ export default function (prevState = {}, action) {
                 return {...prevState, loginSuccess:action.payload}  // 위의 prevState를 그대로 가져오고,
                                         // user_action.js에 있는 payload를 그대로 가져와서 return.
             break;
-    
         default:
-            break;
+            return prevState;
     }
 }

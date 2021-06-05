@@ -6,11 +6,11 @@
 // ------------------------------------
 // 이렇게 나눠진 다양한 reducer을 combineReducers을 통해 rootReducer에서 하나로 합쳐주는 기능을 만들 것임.
 import { combineReducers } from 'redux';
-// import user from './user_reducer';   // user(회원가입, 로그인, 인증, 로그아웃 기능이 있음) reducer
+import user from './user_reducer';   // user(회원가입, 로그인, 인증, 로그아웃 기능이 있음) reducer
 // import comment from './comment_reducer'; // comment기능이 있을 때 reducer
 
 const rootReducer = combineReducers( {
-
+  user  
 })
 
 // 다른 곳에서도 rootReducer을 쓸 수 있도록

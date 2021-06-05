@@ -4,15 +4,15 @@ import React from 'react'
 import {useState} from 'react'
 import {useDispatch} from 'react-redux';
 import {loginUser} from '../../../_actions/user_action'
+import { withRouter } from 'react-router-dom';
 
-function LoginPage() {
+function LoginPage(props) {
     
 
     // 이 로그인페이지 안에서 input에 타이핑을 함으로써 데이터를 변화시켜주므로 state 사용.
     // 1-1. state을 사용하기 위해 state 만들어줌.
-    const initialState = "";
-    const [Email, setEmail] = useState(initialState);   // 1-2. email을 위한 state
-    const [Password, setPassword] = useState(initialState); // 1-2. password를 위한 state
+    const [Email, setEmail] = useState("");   // 1-2. email을 위한 state
+    const [Password, setPassword] = useState(""); // 1-2. password를 위한 state
     //1-3. 아래 input value에 넣어줌
 
     // 2-1. 타이핑할 때 타이핑 하는 거 보이게 하도록 핸들러를 만들어줌
@@ -37,6 +37,15 @@ function LoginPage() {
         }
     
         dispatch(loginUser(logInfo)) // _actions폴더 user_action.js에 있음
+            .then(response => {
+                if(response.payload.loginSuccess)
+                    props.history.push('/');
+                
+                else
+                    alert('Error');
+                
+
+                })
         
     }
     return (
@@ -58,4 +67,4 @@ function LoginPage() {
     )
 }
 
-export default LoginPage
+export default withRouter(LoginPage)

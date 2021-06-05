@@ -11,7 +11,10 @@ function LandingPage() {
     return (
         <div style={{justifyContent:'center', alignItems: 'center', display:'flex', width:'100%'}}>
             <h1>시작 페이지</h1>
+            <button> Logout </button>
         </div>
+
+        
     )
 }
 

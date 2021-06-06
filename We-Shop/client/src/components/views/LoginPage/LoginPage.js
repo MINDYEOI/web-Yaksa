@@ -1,70 +1,149 @@
-import axios from 'axios';
-//import { response } from 'express';
-import React from 'react'
-import {useState} from 'react'
-import {useDispatch} from 'react-redux';
-import {loginUser} from '../../../_actions/user_action'
-import { withRouter } from 'react-router-dom';
+import React, { useState } from "react";
+import { withRouter } from "react-router-dom";
+import { loginUser } from "../../../_actions/user_actions";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { Form, Icon, Input, Button, Checkbox, Typography } from 'antd';
+import { useDispatch } from "react-redux";
+
+const { Title } = Typography;
 
 function LoginPage(props) {
-    
+  const dispatch = useDispatch();
+  //const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
 
-    // 이 로그인페이지 안에서 input에 타이핑을 함으로써 데이터를 변화시켜주므로 state 사용.
-    // 1-1. state을 사용하기 위해 state 만들어줌.
-    const [Email, setEmail] = useState("");   // 1-2. email을 위한 state
-    const [Password, setPassword] = useState(""); // 1-2. password를 위한 state
-    //1-3. 아래 input value에 넣어줌
+  const [Error, setError] = useState('')
+  //const [rememberMe, setRememberMe] = useState(rememberMeChecked)
 
-    // 2-1. 타이핑할 때 타이핑 하는 거 보이게 하도록 핸들러를 만들어줌
-    const emailEvent = (event) => {
-        setEmail(event.currentTarget.value)
-    }
-    const passwordEvent = (event) => {
-        setPassword(event.currentTarget.value)
-    
-    }
+  // const handleRememberMe = () => {
+  //   setRememberMe(!rememberMe)
+  // };
 
-    const dispatch = useDispatch();
-    const submitEvent = (event) => {
-        event.preventDefault(); // 이걸 하지 않으면 버튼을 누를 때마다 refresh돼서 데이터 처리를 할 수 없음
-        
-        //console.log('Email', Email); // 잘 나오는지 확인
-        //console.log('Password', Password); // 잘 나오는지 확인
+  //const initialEmail = localStorage.getItem("rememberMe") ? localStorage.getItem("rememberMe") : '';
 
-        let logInfo = {    // 보내주기 위해 저장
-            email: Email,
-            password: Password
-        }
-    
-        dispatch(loginUser(logInfo)) // _actions폴더 user_action.js에 있음
+  return (
+    <Formik
+      initialValues={{
+        email: '',
+        password: '',
+      }}
+      // validationSchema={Yup.object().shape({
+      //   email: Yup.string()
+      //     .email('Email is invalid')
+      //     .required('Email is required'),
+      //   password: Yup.string()
+      //     .min(6, 'Password must be at least 6 characters')
+      //     .required('Password is required'),
+      // })}
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(() => {
+          let dataToSubmit = {
+            email: values.email,
+            password: values.password
+          };
+
+          dispatch(loginUser(dataToSubmit))
             .then(response => {
-                if(response.payload.loginSuccess)
-                    props.history.push('/');
-                
-                else
-                    alert('Error');
-                
+              if (response.payload.loginSuccess) {
+                window.localStorage.setItem('userId', response.payload.userId);
+                // if (rememberMe === true) {
+                //   window.localStorage.setItem('rememberMe', values.id);
+                // } else {
+                //   localStorage.removeItem('rememberMe');
+              //  }
+                props.history.push("/");
+              } else {
+                setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+              }
+            })
+            .catch(err => {
+              setError('이메일 또는 비밀번호가 올바르지 않습니다.')
+              setTimeout(() => {
+                setError("")
+              }, 3000);
+            });
+          setSubmitting(false);
+        }, 500);
+      }}
+    >
+      {props => {
+        const {
+          values,
+          touched,
+          errors,
+          dirty,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset,
+        } = props;
+        return (
+          <div className="app">
 
-                })
-        
-    }
-    return (
-        <div style={{
-            justifyContent:'center', alignItems: 'center', display:'flex', width:'100%', height:'50vh'
-        }}>
-            <form onSubmit={submitEvent}>
-                <label>Email</label>
-                <input type="email" value={Email} onChange={emailEvent} />
-                {/* input type="email"이라서 '이메일 주소에 '@'를 포함해주세요'라는 경고문 뜸. */}
-                <label>Password</label>
-                <input type="password" value={Password} onChange={passwordEvent} />
-                <br/>
-                <button>
-                    Login
-                </button>
+            <Title level={2}>로그인</Title>
+            <form onSubmit={handleSubmit} style={{ width: '350px' }}>
+
+              <Form.Item required>
+                <Input
+                  id="email"
+                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  placeholder="Enter your email"
+                  type="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={
+                    errors.email && touched.email ? 'text-input error' : 'text-input'
+                  }
+                />
+                {errors.email && touched.email && (
+                  <div className="input-feedback">{errors.email}</div>
+                )}
+              </Form.Item>
+
+              <Form.Item required>
+                <Input
+                  id="password"
+                  prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  placeholder="Enter your password"
+                  type="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={
+                    errors.password && touched.password ? 'text-input error' : 'text-input'
+                  }
+                />
+                {errors.password && touched.password && (
+                  <div className="input-feedback">{errors.password}</div>
+                )}
+              </Form.Item>
+
+              {Error && (
+                <label ><p style={{ color: '#508DFF', fontSize: '0.8rem' }}>{Error}</p></label>
+              )}
+
+              <Form.Item>
+                {/* <Checkbox id="rememberMe" onChange={handleRememberMe} checked={rememberMe} >Remember me</Checkbox>
+                <a className="login-form-forgot" href="/reset_user" style={{ float: 'right' }}>
+                  forgot password
+                  </a> */}
+                <div>
+                  <Button type="primary" htmlType="submit" className="login-form-button" style={{ minWidth: '100%' }} disabled={isSubmitting} onSubmit={handleSubmit}>
+                    로그인
+                </Button>
+                </div>
+                <a href="/register" style={{ minWidth: '100%' }}>회원가입</a>
+              </Form.Item>
             </form>
-        </div>
-    )
-}
+          </div>
+        );
+      }}
+    </Formik>
+  );
+};
 
-export default withRouter(LoginPage)
+export default withRouter(LoginPage);
+
+

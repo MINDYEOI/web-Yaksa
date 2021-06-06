@@ -9,12 +9,16 @@ import {
 import LandingPage from './components/views/LandingPage/LandingPage'
 import LoginPage from './components/views/LoginPage/LoginPage'
 import RegisterPage from './components/views/RegisterPage/RegisterPage'
+import UploadPage from './components/views/UploadPage/UploadPage'
 import auth from './hoc/authentication'
+import Navigation from './components/views/NavBar/NavBar'
 
 function App() {  
   return (
     <Router>
+      <Navigation />
       <div>
+        
         <Switch>
                                                {/* null, false에 대한 옵션 설명은 auth로 가서 확인*/}
           
@@ -24,6 +28,7 @@ function App() {
 
           <Route exact path="/register" component={auth(RegisterPage, false)}/>
           
+          <Route exact path="/product/upload" component={auth(UploadPage, true)}/>
           {/*
           <Route exact path="/" component={LandingPage} />     
 

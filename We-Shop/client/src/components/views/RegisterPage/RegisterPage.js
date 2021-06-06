@@ -1,93 +1,184 @@
-import React from 'react'
-import {useState} from 'react'
-import {useDispatch} from 'react-redux';
-import {RegisterUser} from '../../../_actions/user_action'
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import moment from "moment";
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { registerUser } from "../../../_actions/user_actions";
+import { useDispatch } from "react-redux";
+
+import {
+  Form,
+  Input,
+  Button,
+} from 'antd';
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 8 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 16 },
+  },
+};
+const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
 
 function RegisterPage(props) {
+  const dispatch = useDispatch();
+  return (
 
-    // 이 로그인페이지 안에서 input에 타이핑을 함으로써 데이터를 변화시켜주므로 state 사용.
-    // 1-1. state을 사용하기 위해 state 만들어줌.
-    const [Name, setName] = useState("");
-    const [Email, setEmail] = useState("");   // 1-2. email을 위한 state
-    const [Password, setPassword] = useState(""); // 1-2. password를 위한 state
-    const [Password2, setPassword2] = useState("");
+    <Formik
+      initialValues={{
+        email: '',
+       
+        name: '',
+        password: '',
+        confirmPassword: ''
+      }}
+      validationSchema={Yup.object().shape({
+        name: Yup.string()
+          .required('이름이 올바르게 입력되지 않았습니다.'),
+       
+        email: Yup.string()
+          .required('이메일이 올바르게 입력되지 않았습니다.'),
+        password: Yup.string()
+          .min(3, '비밀번호는 3자리 이상이어야 합니다.')
+          .required('비밀번호를 입력해주세요.'),
+        confirmPassword: Yup.string()
+          .oneOf([Yup.ref('password'), null], '비밀번호를 다시 확인해주세요.')
+          .required('비밀번호 확인이 올바르게 입력되지 않았습니다.')
+      })}
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(() => {
 
-    //1-3. 아래 input value에 넣어줌
+          let dataToSubmit = {
+            email: values.email,
+            password: values.password,
+            name: values.name,
+            
+            //image: `http://gravatar.com/avatar/${moment().unix()}?d=identicon`
+          };
 
-    // 2-1. 타이핑할 때 타이핑 하는 거 보이게 하도록 핸들러를 만들어줌
-    const emailEvent = (event) => {
-        setEmail(event.currentTarget.value)
-    }
-    const passwordEvent = (event) => {
-        setPassword(event.currentTarget.value)
-    
-    }
-    const password2Event = (event) => {
-        setPassword2(event.currentTarget.value)
-    
-    }  
-    const NameEvent = (event) => {
-        setName(event.currentTarget.value)
-    
-    }
+          dispatch(registerUser(dataToSubmit)).then(response => {
+            if (response.payload.success) {
+              props.history.push("/login");
+            } else {
+              alert(response.payload.err.errmsg)
+            }
+          })
 
-    const dispatch = useDispatch();
-    const submitEvent = (event) => {
-        event.preventDefault(); // 이걸 하지 않으면 버튼을 누를 때마다 refresh돼서 데이터 처리를 할 수 없음
-        
-        //console.log('Email', Email); // 잘 나오는지 확인
-        //console.log('Password', Password); // 잘 나오는지 확인
+          setSubmitting(false);
+        }, 500);
+      }}
+    >
+      {props => {
+        const {
+          values,
+          touched,
+          errors,
+          dirty,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset,
+        } = props;
+        return (
+          <div className="app">
+            <h2>회원가입</h2>
+            <Form style={{ minWidth: '375px' }} {...formItemLayout} onSubmit={handleSubmit} >
 
-        // 비밀번호 두개가 같아야 회원가입이 되도록
-        if(Password !== Password2)
-            return alert('비밀번호가 일치하지 않습니다.')
+              <Form.Item required label="Name">
+                <Input
+                  id="name"
+                  placeholder="이름을 입력하세요."
+                  type="text"
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={
+                    errors.name && touched.name ? 'text-input error' : 'text-input'
+                  }
+                />
+                {errors.name && touched.name && (
+                  <div className="input-feedback">{errors.name}</div>
+                )}
+              </Form.Item>             
+
+              <Form.Item required label="Email" hasFeedback>
+                <Input
+                  id="email"
+                  placeholder="이메일을 입력하세요."
+                  type="email"
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={
+                    errors.email && touched.email ? 'text-input error' : 'text-input'
+                  }
+                />
+                {errors.email && touched.email && (
+                  <div className="input-feedback">{errors.email}</div>
+                )}
+              </Form.Item>
+
+              <Form.Item required label="Password" hasFeedback>
+                <Input
+                  id="password"
+                  placeholder="비밀번호를 입력하세요."
+                  type="password"
+                  value={values.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={
+                    errors.password && touched.password ? 'text-input error' : 'text-input'
+                  }
+                />
+                {errors.password && touched.password && (
+                  <div className="input-feedback">{errors.password}</div>
+                )}
+              </Form.Item>
+
+              <Form.Item required label="Confirm" hasFeedback>
+                <Input
+                  id="confirmPassword"
+                  placeholder="비밀번호를 다시 한 번 입력해주세요."
+                  type="password"
+                  value={values.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className={
+                    errors.confirmPassword && touched.confirmPassword ? 'text-input error' : 'text-input'
+                  }
+                />
+                {errors.confirmPassword && touched.confirmPassword && (
+                  <div className="input-feedback">{errors.confirmPassword}</div>
+                )}
+              </Form.Item>
+
+              <Form.Item {...tailFormItemLayout}>
+                <Button onClick={handleSubmit} type="primary" disabled={isSubmitting}>
+                  Submit
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
+        );
+      }}
+    </Formik>
+  );
+};
 
 
-        let regiInfo = {    // 보내주기 위해 저장
-            name : Name,
-            email: Email,
-            password: Password
-        }
-    
-        dispatch(RegisterUser(regiInfo)) // _actions폴더 user_action.js에 있음
-            .then(response => {
-                if(response.payload.success)
-                    props.history.push('/login');
-                
-                else
-                    alert('Fail to sign up');
-                })
-        
-    }
-
-    return (
-        <div style={{
-            justifyContent:'center', alignItems: 'center', display:'flex', width:'100%', height:'50vh'
-        }}>
-            <form onSubmit={submitEvent} style={{display: 'flex', flexDirection: 'column'}}>
-
-                <label>Name</label>
-                <input type="text" value={Name} onChange={NameEvent} />
-
-                <label>Email</label>
-                <input type="email" value={Email} onChange={emailEvent} />
-                {/* input type="email"이라서 '이메일 주소에 '@'를 포함해주세요'라는 경고문 뜸. */}
-
-
-                <label>Password</label>
-                <input type="password" value={Password} onChange={passwordEvent} />
-
-                <label>Confirm Password</label>
-                <input type="password" value={Password2} onChange={password2Event} />
-                
-                <br/> 
-                <button>
-                    Sign In
-                </button>
-            </form>
-        </div>
-    )
-}
-
-export default withRouter(RegisterPage)
+export default RegisterPage

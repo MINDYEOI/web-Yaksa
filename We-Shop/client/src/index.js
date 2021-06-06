@@ -1,34 +1,36 @@
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/ie11';
+import 'core-js';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux'  // app에 redux를 연결시켜주기 위해 redux에서 제공하는 provider 사용
-import { createStore } from 'redux';  // redux에서 createStore 가져옴.
-import { applyMiddleware } from 'redux';  // object만 받는 store가 promise나 functions도 받기 위해 middleware을 사용함
+import App from './components/App';
+import * as serviceWorker from './serviceWorker';
+import { BrowserRouter } from "react-router-dom";
+
+import Reducer from './_reducers';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
-import Reducer from './_reducers';
 
-import 'antd/dist/antd.css';
-
-
-const createStoreWithMiddleware = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore)
+const createStoreWithMiddleware = applyMiddleware(promiseMiddleware, ReduxThunk)(createStore);
 
 ReactDOM.render(
-  // App에 Redux를 연결
-  <Provider
-        store={createStoreWithMiddleware(Reducer,
+    <Provider
+        store={createStoreWithMiddleware(
+            Reducer,
             window.__REDUX_DEVTOOLS_EXTENSION__ &&
             window.__REDUX_DEVTOOLS_EXTENSION__()
         )}
     >
-        <App />
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     </Provider>
-    , document.getElementById('root')
-);
-
-// If you want to start measuring performance in your app, pass a function
-// to log resu lts (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+    , document.getElementById('root'));
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();

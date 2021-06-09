@@ -30,9 +30,9 @@ app.use(cors())
 
 
 app.use('/api/users', require('./routes/users'));
+app.use('/api/image', require('./routes/productImage'));
 
-
-// 이미지 가져오려고
+// 업로드 하려고
 app.use('/uploads', express.static('uploads'));
 
 if (process.env.NODE_ENV === "production") {
@@ -41,6 +41,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
   });
 }
+
 
 app.listen(port, () => {
   console.log(`Server ---> http://localhost:${port}`)

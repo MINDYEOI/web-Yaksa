@@ -1,11 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
 import { Typography, Button, Form, Input } from 'antd'; // css
-
+import ImageUpload from '../../utils/ImageUpload'
 
 const { TextArea } = Input;     // 박스크기 조절을 사용자가 임의로 가능하게 함.
 
-// Options
+// Select Options
 const options = [{ key: 1, value: "a" },
     { key: 2, value: "b" },
     {key: 3, value : "c"}    
@@ -44,9 +44,6 @@ function UploadPage() {
     }
 
 
-
-
-
     return (
         <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
             
@@ -56,7 +53,8 @@ function UploadPage() {
             </div>
 
             <Form>
-                
+                {/* 파일업로드 부분은 코드가 길어서 따로 컴포넌트로 만들었습니다. */}
+                <ImageUpload />
                 <br />
                 <br />
                 <label>이름</label>

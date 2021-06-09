@@ -5,17 +5,18 @@ import axios from 'axios';
 function ImageUpload() {
 
     const imageDropEvent = (files) => {
-        let imageData = new imageData();
+        let imageData = new FormData();
 
         const config = {
             header: {'content-type': 'multipart/image-data'}
         }
+        imageData.append("file", files[0])
 
         // 이미지 전달
         axios.post('/api/product/image', imageData, config)
             .then(response => {
                 if (response.data.success) {
-                
+                    console.log(response.data)
                 }
                 else {
                     alert('파일 저장을 실패했습니다.')

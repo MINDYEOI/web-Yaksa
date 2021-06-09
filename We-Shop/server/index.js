@@ -30,6 +30,7 @@ app.use(cors())
 
 
 app.use('/api/users', require('./routes/users'));
+app.use('/api/product', require('./routes/product'));
 
 
 // 이미지 가져오려고

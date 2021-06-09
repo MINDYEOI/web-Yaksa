@@ -2,6 +2,7 @@ const express = require('express');
 const { User } = require("../models/User");
 const { auth } = require("../middleware/auth");
 const router = express.Router();
+const multer = require('multer');
 
 
 var storage = multer.diskStorage({
@@ -10,15 +11,15 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
       cb(null, Date.now() + '_' + file.originalname) // 이미지 이름
-    }
+      }
   })
    
-  var upload = multer({ storage: storage })
+var upload = multer({ storage: storage }).single("file");
 
 router.post('/image', (req, res) => {
 
     // 클라이언트로부터 받은 이미지 저장
-    upload(req, res, err => {
+    upload(req, res, (err) => {
         if (err) return req.json({ success: false, err })
         return res.json({success: true, filePath: res.req.file.path, fileName: res.req.file.filename})   
     }

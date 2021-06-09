@@ -8,7 +8,7 @@ const cors = require('cors')
 // body-parser 가져옴
 const bodyParser = require('body-parser')
 // bodyParser option
-app.use(bodyParser.urlencoded({extended: true}))  //application/x-www-form-urlencoded로 된 데이터를 분석해서 가져옴
+app.use(bodyParser.urlencoded({ extended: true }))  //application/x-www-form-urlencoded로 된 데이터를 분석해서 가져옴
 app.use(bodyParser.json())  // application/json 타입으로 된 데이터를 분석해서 가져옴
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());

@@ -8,7 +8,7 @@ const cors = require('cors')
 // body-parser 가져옴
 const bodyParser = require('body-parser')
 // bodyParser option
-app.use(bodyParser.urlencoded({extended: true}))  //application/x-www-form-urlencoded로 된 데이터를 분석해서 가져옴
+app.use(bodyParser.urlencoded({ extended: true }))  //application/x-www-form-urlencoded로 된 데이터를 분석해서 가져옴
 app.use(bodyParser.json())  // application/json 타입으로 된 데이터를 분석해서 가져옴
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
@@ -32,8 +32,7 @@ app.use(cors())
 app.use('/api/users', require('./routes/users'));
 app.use('/api/product', require('./routes/product'));
 
-
-// 이미지 가져오려고
+// 업로드 하려고
 app.use('/uploads', express.static('uploads'));
 
 if (process.env.NODE_ENV === "production") {
@@ -42,6 +41,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "../client", "build", "index.html"));
   });
 }
+
 
 app.listen(port, () => {
   console.log(`Server ---> http://localhost:${port}`)

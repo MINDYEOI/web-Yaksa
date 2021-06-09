@@ -30,7 +30,7 @@ app.use(cors())
 
 
 app.use('/api/users', require('./routes/users'));
-app.use('/api/image', require('./routes/productImage'));
+app.use('/api/image', require('./routes/product'));
 
 // 업로드 하려고
 app.use('/uploads', express.static('uploads'));

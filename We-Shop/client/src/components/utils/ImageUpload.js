@@ -5,7 +5,7 @@ import axios from 'axios';
 function ImageUpload() {
 
     const imageDropEvent = (files) => {
-        let imageData = new imageData();
+        let imageData = new FormData();
 
         const config = {
             header: {'content-type': 'multipart/image-data'}

@@ -1,9 +1,13 @@
 import React from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios';
+import { useState } from 'react';
 
-function ImageUpload() {
+function ImageUpload(props) {
 
+    const [Images, setImages] = useState([])    // 이미지를 여러장 들어가게 하기 위해서
+
+    // 이미지 서버에 저장
     const imageDropEvent = (files) => {
         let imageData = new FormData();
 
@@ -16,7 +20,10 @@ function ImageUpload() {
         axios.post('/api/product/image', imageData, config)
             .then(response => {
                 if (response.data.success) {
-                    console.log(response.data)
+                    //console.log(response.data)
+                    setImages([...Images, response.data.filePath])
+                    props.refreshFunction([...Images, response.data.filePath])
+                    // 이 props (refreshFunction)은 UploadPage에 정의되어 있음
                 }
                 else {
                     alert('파일 저장을 실패했습니다.')
@@ -24,6 +31,21 @@ function ImageUpload() {
         })
 
     }
+
+    // 이미지 삭제 위한 deleteEvent
+    const deleteEvent = (image) => { 
+        const currentIndex = Images.indexOf(image);
+
+        //console.log(currentIndex);
+        
+        let updateImages = [...Images];
+        updateImages.splice(currentIndex, 1);   // currentIndex부터 1개의 사진을 지움
+        
+        setImages(updateImages);
+        props.refreshFunction(updateImages);
+    }
+
+
     return (
         <div style={ {display:'flex', justifyContent:'space-between'}}>
             <Dropzone onDrop={imageDropEvent}>
@@ -39,7 +61,26 @@ function ImageUpload() {
                  </div> 
             </section>
   )}
-</Dropzone>
+            </Dropzone>
+            
+
+            {/* 파일 업로드하면 옆에 나오게 하도록 */}
+            <div style={{
+                width: '350px', height: '200px', borderRadius: '1em'
+                , overflowX: 'scroll'
+            }}>
+                {Images.map((image, index) => (
+
+                    <div onClick={ () => deleteEvent(image) }
+                        key={index}>
+                        <img style={{
+                            width: '300px', height: '200px', border: '1px solid lightgray',
+                            borderRadius: '1em', display: 'flex'}}
+                            src={`http://localhost:5000/${image}`} />
+                </div>
+                    ))}
+            </div>
+
         </div>
     )
 }

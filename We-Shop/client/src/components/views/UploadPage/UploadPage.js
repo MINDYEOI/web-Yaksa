@@ -43,6 +43,10 @@ function UploadPage() {
         setImage(event.currentTarget.value);
     }
 
+    const updateImages = ( newImages ) => {
+        setImage(newImages);
+    }
+
 
     return (
         <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
@@ -53,8 +57,8 @@ function UploadPage() {
             </div>
 
             <Form>
-                {/* 파일업로드 부분은 코드가 길어서 따로 컴포넌트로 만들었습니다. */}
-                <ImageUpload />
+                {/* 파일업로드 부분은 코드가 길어서 따로 컴포넌트로 만들어버리기~! */}
+                <ImageUpload refreshFunction={updateImages}/>
                 <br />
                 <br />
                 <label>이름</label>

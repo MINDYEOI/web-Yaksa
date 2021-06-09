@@ -20,8 +20,10 @@ router.post('/image', (req, res) => {
 
     // 클라이언트로부터 받은 이미지 저장
     upload(req, res, (err) => {
-        if (err) return req.json({ success: false, err })
-        return res.json({success: true, filePath: res.req.file.path, fileName: res.req.file.filename})   
+      if (err) {
+        return req.json({ success: false, err })
+      }
+      return res.json({ success: true, filePath: res.req.file.path, fileName: res.req.file.filename })
     }
     )
 

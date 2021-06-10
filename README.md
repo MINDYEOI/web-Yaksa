@@ -1,6 +1,6 @@
 ![](https://images.velog.io/images/mindyeoi/post/39416bc0-636f-4034-b4f5-84d064701c03/whatmedicine.png)![](https://images.velog.io/images/mindyeoi/post/2ad382db-8e5b-4532-9e0b-e16fa32a56ae/KakaoTalk_Photo_2021-06-11-05-00-23.png)
 <center> 
-  <h2> 약 배달 서비스 : 약사 </h2>
+  <h1> 약 배달 서비스 : 약사 </h1>
   이제 아플 때 억지로 약국가지 마세요!<br>
 약사가 배달해드립니다!
   </center>

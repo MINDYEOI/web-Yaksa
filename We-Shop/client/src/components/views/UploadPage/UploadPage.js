@@ -2,16 +2,21 @@ import React from 'react';
 import { useState } from 'react';
 import { Typography, Button, Form, Input } from 'antd'; // css
 import ImageUpload from '../../utils/ImageUpload'
+import Axios from 'axios';
 
 const { TextArea } = Input;     // 박스크기 조절을 사용자가 임의로 가능하게 함.
 
-// Select Options
-const options = [{ key: 1, value: "a" },
-    { key: 2, value: "b" },
-    {key: 3, value : "c"}    
+// Select symtoms
+const symtoms = [{ key: 1, value: "진통제" },
+    { key: 2, value: "소화제" },
+    { key: 3, value: "감기약" },
+    { key: 4, value: "해열제" },
+    { key: 5, value: "파스류" },
+    { key: 6, value: "상처치료" },
+    { key: 7, value: "기타" }
 ]
 
-function UploadPage() {
+function UploadPage(props) {
 
     // OnChange Function
     
@@ -47,6 +52,35 @@ function UploadPage() {
         setImage(newImages);
     }
 
+    const submitEvent = (event) => {
+        event.preventDefault(); // 확인버튼을 누를 때 리프레시 되지 않도록
+        
+        if (!Title || !Info || !Cost || !Option || !Image) {
+            return alert("모두 입력해주세요.")
+        }
+
+        // 서버에 보낼 값들
+        const body = {
+            seller: props.user.userData._id,
+            title: Title,
+            info: Info,
+            price: Cost,
+            images: Image,
+            symtoms: Option
+        }
+
+        Axios.post("/api/product", body)
+            .then(response => {
+                if (response.data.success) {
+                    alert("업로드가 완료되었습니다.");
+                    props.history.push('/');    // 상품 업로드가 성공하면 메인페이지로 돌아감.
+                }
+                else {
+                    alert("업로드에 실패했습니다.")
+                }
+        })
+    }
+
 
     return (
         <div style={{ maxWidth: '700px', margin: '2rem auto' }}>
@@ -56,7 +90,7 @@ function UploadPage() {
                     
             </div>
 
-            <Form>
+            <Form onSubmit={submitEvent}>
                 {/* 파일업로드 부분은 코드가 길어서 따로 컴포넌트로 만들어버리기~! */}
                 <ImageUpload refreshFunction={updateImages}/>
                 <br />
@@ -75,14 +109,14 @@ function UploadPage() {
                 <br />
                 <br />
                 <select onChange={optionEvent} value={ Option}>
-                    {options.map(item => (
+                    {symtoms.map(item => (
                         <option key={item.key} value={item.key}>{ item.value}</option>
                     ))}
                     <option></option>
                 </select>
                 <br />
                 <br />
-                <Button>확인</Button>
+                <Button onClick={submitEvent}>확인</Button>
                 
             </Form>
 
@@ -90,4 +124,4 @@ function UploadPage() {
     )
 } 
 
-export default UploadPage
+    export default UploadPage;

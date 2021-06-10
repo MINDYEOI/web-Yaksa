@@ -2,6 +2,7 @@ import React from 'react'
 import Dropzone from 'react-dropzone'
 import axios from 'axios';
 import { useState } from 'react';
+import './ImageUpload.css'
 
 function ImageUpload(props) {
 
@@ -51,13 +52,14 @@ function ImageUpload(props) {
             <Dropzone onDrop={imageDropEvent}>
             {({getRootProps, getInputProps}) => (
             <section>
+                        {/* Dropzone */}
                         <div style={{
                             width: 300, height: 200, border: '1px solid lightgray', borderRadius: '1em', display: 'flex',
                             alignItems: 'center', textAlign: 'center', justifyContent: 'center'
                         }}
                 {...getRootProps()}>
                     <input {...getInputProps()} />
-                    <p>이곳을 클릭하여 <br/> 상품 사진을 업로드 해주세요.</p>
+                    <p>이곳을 클릭하여<br/>상품 사진을 업로드 해주세요.</p>
                  </div> 
             </section>
   )}
@@ -72,11 +74,10 @@ function ImageUpload(props) {
                 {Images.map((image, index) => (
 
                     <div onClick={ () => deleteEvent(image) }
-                        key={index}>
-                        <img style={{
-                            width: '300px', height: '200px', border: '1px solid lightgray',
-                            borderRadius: '1em', display: 'flex'}}
-                            src={`http://localhost:5000/${image}`} />
+                        key={index}>                        
+                        <img id="test" src={`http://localhost:5000/${image}`} />
+                        <div id="alert">클릭하면 삭제돼요!</div>
+
                 </div>
                     ))}
             </div>

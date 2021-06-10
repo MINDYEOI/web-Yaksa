@@ -18,7 +18,8 @@ npm install
 
 2. `We-Shop/server/config` 폴더에 `dev.js` 파일을 만들어주세요!
 3. `We-Shop/server/config/dev.js` 파일에 다음을 입력하고 저장해주세요!
-```module.exports = {
+```
+module.exports = {
   mongoURI: "mongodb+srv://<mongoDBID>:<mongoDBpw>@boilerplate.djq4a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
 };
 ```

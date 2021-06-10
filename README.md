@@ -10,7 +10,7 @@
 1. 터미널에서 다음 순서대로 입력해주세요!
 ```
 git clone http://khuhub.khu.ac.kr/2018110650/We-Shop.git
-cd We-Shop
+cd We-Shop/We-Shop/
 npm install
 cd client
 npm install

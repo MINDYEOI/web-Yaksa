@@ -39,6 +39,7 @@ npm run dev
 [update] : 기존 기능 업데이트
 [merge] : 브랜치 merge
 ```
+
 ## Branch Strategy : Git-Flow
 ### 🏳️ main 
 - 기본적으로 제공되는 브랜치.

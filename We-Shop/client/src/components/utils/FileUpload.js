@@ -3,7 +3,7 @@ import Dropzone from "react-dropzone";
 import { Icon } from "antd";
 import Axios from "axios";
 import "./FileUpload.css";
-
+import { PRODUCT_SERVER } from '../Config'
 function FileUpload(props) {
   const [Images, setImages] = useState([]);
 
@@ -13,12 +13,12 @@ function FileUpload(props) {
       header: { "content-type": "multipart/form-data" },
     };
     formData.append("file", files[0]);
-    Axios.post("/api/product/uploadImage", formData, config).then(response => {
+    Axios.post(`${PRODUCT_SERVER}/uploadImage`, formData, config).then(response => {
       if (response.data.success) {
         setImages([...Images, response.data.image]);
         props.refreshFunction([...Images, response.data.image]);
       } else {
-        alert("Failed to save the Image in Server");
+        alert("이미지 서버 업로드에 실패했습니다.");
       }
     });
   };

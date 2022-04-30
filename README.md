@@ -23,7 +23,7 @@ module.exports = {
   mongoURI: "mongodb+srv://<mongoDBID>:<mongoDBpw>@boilerplate.djq4a.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
 };
 ```
-`<mongoDBID>`,`<mongoDBpw>`에는 각각 사용자님의 계정정보가 들어가야 합니다!
+`<mongoDBID>`,`<mongoDBpw>`에는 각각 사용자님의 계정정보가 들어가야 합니다!<br>
 4. `We-Shop` 루트 디렉토리에서 terminal에 다음 명령어를 입력해주세요!
 ```
 npm run dev
